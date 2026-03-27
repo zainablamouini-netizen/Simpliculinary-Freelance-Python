@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payments</title>
+</head>
+<body>
+    <h1>Payments</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Invoice</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Method</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for payment in payments %}
+            <tr>
+                <td>{{ payment.invoice.invoice_number }}</td>
+                <td>{{ payment.amount }}</td>
+                <td>{{ payment.date }}</td>
+                <td>{{ payment.method }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

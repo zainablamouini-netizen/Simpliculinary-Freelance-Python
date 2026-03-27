@@ -1,0 +1,76 @@
+{% extends 'invoices/base.html' %}
+
+{% block title %}Tableau de bord - FreelanceFlow{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Tableau de bord</h1>
+    <div class="date-now">{{ today|date:"d F Y" }}</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Revenu Total</div>
+        <div style="font-size: 1.75rem; font-weight: 700;">{{ total_revenue|floatformat:2 }} €</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">En attente de paiement</div>
+        <div style="font-size: 1.75rem; font-weight: 700; color: var(--warning);">{{ pending_amount|floatformat:2 }} €</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Clients</div>
+        <div style="font-size: 1.75rem; font-weight: 700;">{{ client_count }}</div>
+    </div>
+    <div class="card">
+        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Factures</div>
+        <div style="font-size: 1.75rem; font-weight: 700;">{{ invoice_count }}</div>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <h3 style="margin-bottom: 1.5rem;">Revenus mensuels (6 derniers mois)</h3>
+    <div style="height: 300px;">
+        <canvas id="incomeChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('incomeChart').getContext('2d');
+    const incomeChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [{% for data in monthly_income %}"{{ data.month }}"{% if not forloop.last %}, {% endif %}{% endfor %}],
+            datasets: [{
+                label: 'Revenu (€)',
+                data: [{% for data in monthly_income %}{{ data.amount }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#6366f1',
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                    ticks: { color: '#94a3b8' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8' }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Monthly Revenue: {{ monthly_revenue }}</h2>
+    <h3>Unpaid Invoices</h3>
+    <ul>
+    {% for invoice in unpaid_invoices %}
+        <li>{{ invoice.invoice_number }} - {{ invoice.client.name }} - {{ invoice.total }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>

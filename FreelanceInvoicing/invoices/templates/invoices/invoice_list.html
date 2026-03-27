@@ -1,0 +1,60 @@
+{% extends 'invoices/base.html' %}
+
+{% block title %}Factures - FreelanceFlow{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Mes Factures</h1>
+    <a href="/admin/invoices/invoice/add/" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nouvelle Facture
+    </a>
+</div>
+
+<div class="card">
+    {% if invoices %}
+    <table>
+        <thead>
+            <tr>
+                <th>N° Facture</th>
+                <th>Client</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total HT</th>
+                <th>Total TTC</th>
+                <th>Reste à payer</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for invoice in invoices %}
+            <tr>
+                <td style="font-weight: 600;">{{ invoice.invoice_number }}</td>
+                <td>{{ invoice.client.name }}</td>
+                <td>{{ invoice.date|date:"d/m/Y" }}</td>
+                <td>
+                    <span class="status-badge status-{{ invoice.status|lower }}">
+                        {{ invoice.get_status_display }}
+                    </span>
+                </td>
+                <td>{{ invoice.total_ht|floatformat:2 }} €</td>
+                <td>{{ invoice.total_ttc|floatformat:2 }} €</td>
+                <td style="color: {% if invoice.balance_due > 0 %}var(--warning){% else %}var(--success){% endif %};">
+                    {{ invoice.balance_due|floatformat:2 }} €
+                </td>
+                <td>
+                    <a href="{% url 'invoice_pdf' invoice.id %}" target="_blank" style="color: var(--secondary); margin-right: 1rem;" title="Télécharger PDF">
+                        <i class="fas fa-file-pdf"></i>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+        <i class="fas fa-file-invoice" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+        <p>Aucune facture trouvée.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

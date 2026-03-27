@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Invoice</title>
+</head>
+<body>
+    <h1>Create Invoice</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <h3>Items</h3>
+        {{ formset.management_form }}
+        {% for item_form in formset %}
+            {{ item_form.as_p }}
+        {% endfor %}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'billing:invoice_list' %}">Back to Invoices</a>
+</body>
+</html>

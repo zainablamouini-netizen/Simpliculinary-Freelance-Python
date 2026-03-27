@@ -1,0 +1,44 @@
+{% extends 'invoices/base.html' %}
+
+{% block title %}Clients - FreelanceFlow{% endblock %}
+
+{% block content %}
+<div class="header">
+    <h1>Gestion des Clients</h1>
+    <a href="{% url 'client_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Nouveau Client
+    </a>
+</div>
+
+<div class="card">
+    {% if clients %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for client in clients %}
+            <tr>
+                <td style="font-weight: 600;">{{ client.name }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.phone }}</td>
+                <td>
+                    <a href="{% url 'client_update' client.id %}" style="color: var(--primary); margin-right: 1rem;"><i class="fas fa-edit"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+        <p>Aucun client trouvé. Commencez par en ajouter un !</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
